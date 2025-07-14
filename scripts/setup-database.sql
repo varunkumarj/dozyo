@@ -1,0 +1,35 @@
+-- MongoDB Collections Setup for Dozyo
+-- This is a reference for the MongoDB collections structure
+
+-- Users Collection
+-- {
+--   _id: ObjectId,
+--   email: String (unique),
+--   name: String,
+--   passwordHash: String,
+--   streakCount: Number (default: 0),
+--   preferredNudgeHours: {
+--     start: String (format: "HH:MM"),
+--     end: String (format: "HH:MM")
+--   },
+--   createdAt: Date
+-- }
+
+-- Tasks Collection
+-- {
+--   _id: ObjectId,
+--   userId: ObjectId (reference to Users),
+--   originalText: String,
+--   microTasks: [
+--     {
+--       text: String,
+--       done: Boolean (default: false)
+--     }
+--   ],
+--   createdAt: Date
+-- }
+
+-- Indexes for better performance
+-- db.users.createIndex({ "email": 1 }, { unique: true })
+-- db.tasks.createIndex({ "userId": 1 })
+-- db.tasks.createIndex({ "createdAt": -1 })
