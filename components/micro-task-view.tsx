@@ -149,7 +149,7 @@ export default function MicroTaskView({ taskId }: MicroTaskViewProps) {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto space-y-6">
           {/* Back Button */}
-          <Link href="/">
+          <Link href="/dashboard">
             <Button variant="ghost" className="mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
@@ -187,7 +187,7 @@ export default function MicroTaskView({ taskId }: MicroTaskViewProps) {
                 <p className="text-green-700 dark:text-green-300 mb-4">
                   You've completed all the micro-steps for this task!
                 </p>
-                <Link href="/">
+                <Link href="/dashboard">
                   <Button>Back to Dashboard</Button>
                 </Link>
               </CardContent>

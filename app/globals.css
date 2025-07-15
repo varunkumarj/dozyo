@@ -1,63 +1,135 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind directives */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    /* Base colors */
+    --background: 35 95% 98%;
     --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
+    
+    /* Card colors - slightly warmer */
+    --card: 30 30% 99%;
     --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
+    
+    /* Popover colors */
+    --popover: 30 30% 99%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 142 76% 73%;
+    
+    /* Primary colors - warmer pink */
+    --primary: 348 100% 76%;
+    --primary-foreground: 355 100% 97%;
+    
+    /* Secondary colors - soothing teal */
+    --secondary: 174 65% 76%;
     --secondary-foreground: 240 5.9% 10%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
+    
+    /* Muted colors - softer */
+    --muted: 35 25% 96%;
+    --muted-foreground: 240 5% 50%;
+    
+    /* Accent colors - lavender */
+    --accent: 262 83% 94%;
     --accent-foreground: 240 5.9% 10%;
+    
+    /* Success color - soothing green */
+    --success: 142 70% 45%;
+    --success-foreground: 355 100% 97%;
+    
+    /* Warning color - soft amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 355 100% 97%;
+    
+    /* Destructive color */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 262 83% 58%;
-    --radius: 0.75rem;
+    
+    /* Border and input colors */
+    --border: 30 15% 90%;
+    --input: 30 15% 90%;
+    --ring: 348 100% 76%;
+    
+    /* Radius and shadows */
+    --radius: 1.25rem;
+    --shadow-color: 348 100% 76%;
+    --shadow-strength: 2%;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 210 40% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 142 76% 73%;
-    --secondary-foreground: 240 10% 3.9%;
-    --muted: 240 3.7% 15.9%;
+    /* Base colors - softer dark */
+    --background: 240 12% 8%;
+    --foreground: 0 0% 95%;
+    
+    /* Card colors - less harsh */
+    --card: 240 10% 12%;
+    --card-foreground: 0 0% 95%;
+    
+    /* Popover colors */
+    --popover: 240 10% 12%;
+    --popover-foreground: 0 0% 95%;
+    
+    /* Primary colors - vibrant but not harsh */
+    --primary: 348 90% 70%;
+    --primary-foreground: 355 100% 97%;
+    
+    /* Secondary colors - deeper teal */
+    --secondary: 174 65% 45%;
+    --secondary-foreground: 0 0% 98%;
+    
+    /* Muted colors - more visible */
+    --muted: 240 5% 18%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 210 40% 98%;
+    
+    /* Accent colors - deeper lavender */
+    --accent: 262 70% 25%;
+    --accent-foreground: 0 0% 95%;
+    
+    /* Success color */
+    --success: 142 70% 40%;
+    --success-foreground: 355 100% 97%;
+    
+    /* Warning color */
+    --warning: 38 92% 45%;
+    --warning-foreground: 355 100% 97%;
+    
+    /* Destructive color */
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 262 83% 58%;
+    --destructive-foreground: 0 0% 95%;
+    
+    /* Border and input colors */
+    --border: 240 5% 25%;
+    --input: 240 5% 25%;
+    --ring: 348 90% 70%;
+    
+    /* Shadow color for dark mode */
+    --shadow-color: 348 50% 30%;
+    --shadow-strength: 5%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }
 
+/* Font settings */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+/* Apply Quicksand font to all elements */
+@layer base {
+  html {
+    font-family: 'Quicksand', sans-serif;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Enhanced animations */
 .confetti {
   animation: confetti-fall 2s ease-out forwards;
 }
@@ -67,12 +139,154 @@
     transform: translateY(-100vh) rotate(0deg);
     opacity: 1;
   }
+  50% {
+    opacity: 0.8;
+  }
   100% {
     transform: translateY(100vh) rotate(720deg);
     opacity: 0;
   }
 }
 
+/* Gradient backgrounds */
 .gradient-bg {
-  background: linear-gradient(135deg, #e0c3fc 0%, #9bb5ff 100%);
+  background: linear-gradient(135deg, #ffd6e0 0%, #ffacc7 100%);
+}
+
+.gradient-bg-secondary {
+  background: linear-gradient(135deg, #c2f0f0 0%, #a0e6e6 100%);
+}
+
+.gradient-bg-accent {
+  background: linear-gradient(135deg, #e2d4f8 0%, #d4bff7 100%);
+}
+
+/* Micro-task animations */
+.micro-task-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.micro-task-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms cubic-bezier(0.34, 1.56, 0.64, 1), transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.micro-task-exit {
+  opacity: 1;
+}
+
+.micro-task-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms cubic-bezier(0.34, 1.56, 0.64, 1), transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Card hover effects */
+.task-card {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-width: 2px;
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px -10px hsla(var(--shadow-color), var(--shadow-strength));
+  border-color: hsl(var(--primary) / 0.3);
+}
+
+/* Progress bar animation */
+.progress-bar {
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)));
+  background-size: 200% 100%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Fixed position elements */
+.celebration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Pulse animation for buttons */
+@keyframes gentle-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.pulse-on-hover:hover {
+  animation: gentle-pulse 1.5s infinite;
+}
+
+/* Checkbox animations */
+.checkbox-container input:checked ~ .checkmark {
+  background-color: hsl(var(--primary));
+  transform: scale(1.1);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.checkbox-container .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+  animation: check-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes check-pop {
+  0% { transform: rotate(45deg) scale(0); }
+  70% { transform: rotate(45deg) scale(1.2); }
+  100% { transform: rotate(45deg) scale(1); }
+}
+
+/* Soft focus styles */
+input:focus, button:focus, a:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px hsla(var(--primary), 0.2);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Toast animations */
+.toast-enter {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.toast-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: opacity 300ms, transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toast-exit {
+  opacity: 1;
+}
+
+.toast-exit-active {
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: opacity 300ms, transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }

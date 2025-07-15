@@ -5,7 +5,15 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI
-const options = {}
+const options = {
+  // Add SSL options for secure connections
+  ssl: true,
+  tls: true,
+  tlsAllowInvalidCertificates: false,
+  retryWrites: true,
+  connectTimeoutMS: 10000,
+  serverSelectionTimeoutMS: 10000
+}
 
 let client: MongoClient
 let clientPromise: Promise<MongoClient>
@@ -28,10 +36,14 @@ if (process.env.NODE_ENV === "development") {
   clientPromise = client.connect()
 }
 
-export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db }> {
+/**
+ * Helper function to connect to the database
+ */
+export async function connectToDatabase() {
   const client = await clientPromise
   const db = client.db("dozyo")
   return { client, db }
 }
 
+// Export a module-scoped MongoClient promise
 export default clientPromise

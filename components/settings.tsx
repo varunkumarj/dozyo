@@ -76,7 +76,7 @@ export default function Settings() {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto space-y-6">
           {/* Back Button */}
-          <Link href="/">
+          <Link href="/dashboard">
             <Button variant="ghost" className="mb-4">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
