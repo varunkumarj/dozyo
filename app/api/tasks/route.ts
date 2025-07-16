@@ -108,16 +108,16 @@ export async function POST(request: NextRequest) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "gpt-3.5-turbo", // Fallback to a more stable model
+            model: "gpt-4.1-nano", // Fallback to a more stable model
             messages: [
               {
                 role: "system",
                 content:
-                  "You are a helpful assistant that breaks down tasks into simple, 1-2 minute micro-steps suitable for someone feeling low-energy. Return only a JSON array of strings, each representing a micro-step.",
+                  "You are a helpful assistant that breaks down tasks into simple, 4-5 minute micro-steps suitable for someone feeling low-energy. Return only a JSON array of strings, each representing a micro-step.",
               },
               {
                 role: "user",
-                content: `Break the task "${originalText}" into simple, 1–2 minute steps suitable for someone feeling low-energy.`,
+                content: `Break the task "${originalText}" into simple, 4-5 minute steps suitable for someone feeling low-energy.`,
               },
             ],
             temperature: 0.7,
