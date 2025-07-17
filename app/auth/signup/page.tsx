@@ -50,7 +50,7 @@ export default function SignUp() {
           title: "Success",
           description: "Account created successfully! Please sign in.",
         })
-        router.push("/auth/signin")
+        router.push("/signin")
       } else {
         const data = await response.json()
         toast({
@@ -179,7 +179,7 @@ export default function SignUp() {
                 </Button>
                 <p className="text-center text-sm text-muted-foreground">
                   Already have an account?{" "}
-                  <Link href="/auth/signin" className="text-primary hover:underline">
+                  <Link href="/signin" className="text-primary hover:underline">
                     Sign in
                   </Link>
                 </p>
