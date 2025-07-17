@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, useAnimation } from "framer-motion"
-import { CheckCircle2, Circle, ChevronRight, Sparkles, Focus, Zap } from "lucide-react"
+import { CheckCircle2, Circle, ChevronRight, Sparkles, Focus, Zap, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
@@ -14,10 +14,11 @@ interface MicroTaskItemProps {
   index: number
   taskId: string
   onToggle: (done: boolean) => void
+  onDelete: () => void
   delay?: number
 }
 
-export function MicroTaskItem({ microTask, index, taskId, onToggle, delay = 0 }: MicroTaskItemProps) {
+export function MicroTaskItem({ microTask, index, taskId, onToggle, onDelete, delay = 0 }: MicroTaskItemProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [showSparkle, setShowSparkle] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
@@ -142,6 +143,33 @@ export function MicroTaskItem({ microTask, index, taskId, onToggle, delay = 0 }:
       
       {/* Action buttons */}
       <div className="flex items-center gap-1">
+        {/* Delete button */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ 
+            opacity: isHovered ? 1 : 0,
+            scale: isHovered ? 1 : 0.8,
+            x: isHovered ? 0 : 10
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          <Button
+            size="icon"
+            variant="ghost"
+            className="h-7 w-7 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (window.confirm('Are you sure you want to delete this step?')) {
+                onDelete();
+              }
+            }}
+            title="Delete step"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+            <span className="sr-only">Delete step</span>
+          </Button>
+        </motion.div>
+
         {/* Focus button - only show when not completed */}
         {!microTask.done && (
           <motion.div

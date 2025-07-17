@@ -186,6 +186,61 @@ export default function Dashboard() {
     }
   }
 
+  const handleDeleteTask = async (taskId: string) => {
+    // Optimistically update UI
+    setTasks(prev => prev.filter(task => task._id !== taskId))
+    
+    // If the deleted task was selected, clear selection
+    if (selectedTaskId === taskId) {
+      setSelectedTaskId(null)
+    }
+    
+    // Delete in the backend
+    try {
+      const response = await fetch(`/api/tasks/${taskId}`, {
+        method: "DELETE",
+      })
+      
+      if (!response.ok) {
+        // Revert on error
+        fetchTasks()
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error)
+      // Revert on error
+      fetchTasks()
+    }
+  }
+  
+  const handleDeleteMicroTask = async (taskId: string, microTaskId: string) => {
+    // Optimistically update UI
+    setTasks(prev => prev.map(task => {
+      if (task._id === taskId) {
+        return {
+          ...task,
+          microTasks: task.microTasks.filter(mt => mt.id !== microTaskId)
+        }
+      }
+      return task
+    }))
+    
+    // Delete in the backend
+    try {
+      const response = await fetch(`/api/tasks/${taskId}/microtasks/${microTaskId}`, {
+        method: "DELETE",
+      })
+      
+      if (!response.ok) {
+        // Revert on error
+        fetchTasks()
+      }
+    } catch (error) {
+      console.error("Error deleting micro-task:", error)
+      // Revert on error
+      fetchTasks()
+    }
+  }
+
   const selectedTask = tasks.find(task => task._id === selectedTaskId)
 
   // Handle task completion from Just Do One component
@@ -275,6 +330,8 @@ export default function Dashboard() {
                 onTaskSelect={handleTaskSelect}
                 selectedTaskId={selectedTaskId}
                 onMicroTaskToggle={handleMicroTaskToggle}
+                onDeleteTask={handleDeleteTask}
+                onDeleteMicroTask={handleDeleteMicroTask}
               />
             </div>
           </div>

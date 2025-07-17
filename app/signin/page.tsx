@@ -157,7 +157,7 @@ export default function SignIn() {
                 </Button>
                 <p className="text-center text-sm text-muted-foreground">
                   Don't have an account?{" "}
-                  <Link href="/signup" className="text-primary hover:underline">
+                  <Link href="/auth/signup" className="text-primary hover:underline">
                     Sign up
                   </Link>
                 </p>

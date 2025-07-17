@@ -133,3 +133,75 @@ export async function PATCH(
     )
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string; microTaskId: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+    }
+
+    const { id, microTaskId } = params
+    if (!id || !microTaskId) {
+      return NextResponse.json(
+        { message: "Task ID and micro-task ID are required" },
+        { status: 400 }
+      )
+    }
+
+    const { db } = await connectToDatabase()
+
+    // Get user
+    const user = await db.collection("users").findOne({ email: session.user.email })
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 })
+    }
+
+    // Check if task exists and belongs to user
+    const task = await db.collection("tasks").findOne({
+      _id: new ObjectId(id),
+      userId: user._id,
+    })
+
+    if (!task) {
+      return NextResponse.json(
+        { message: "Task not found or unauthorized" },
+        { status: 404 }
+      )
+    }
+
+    // Remove the specific micro-task
+    // Using type assertion to resolve TypeScript error with $pull operator
+    const result = await db.collection("tasks").updateOne(
+      { _id: new ObjectId(id) },
+      { $pull: { microTasks: { id: microTaskId } } } as any
+    )
+
+    if (result.modifiedCount === 0) {
+      return NextResponse.json(
+        { message: "Micro-task not found or could not be deleted" },
+        { status: 404 }
+      )
+    }
+
+    // Get the updated task
+    const updatedTask = await db.collection("tasks").findOne({
+      _id: new ObjectId(id),
+    })
+
+    return NextResponse.json({ 
+      success: true, 
+      message: "Micro-task deleted successfully",
+      task: updatedTask 
+    })
+  } catch (error) {
+    console.error("Delete micro-task error:", error)
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    )
+  }
+}

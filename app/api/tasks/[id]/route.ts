@@ -88,3 +88,67 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ message: "Internal server error" }, { status: 500 })
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+    }
+
+    const { id } = params
+    if (!id) {
+      return NextResponse.json(
+        { message: "Task ID is required" },
+        { status: 400 }
+      )
+    }
+
+    const { db } = await connectToDatabase()
+
+    // Get user
+    const user = await db.collection("users").findOne({ email: session.user.email })
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 })
+    }
+
+    // Check if task exists and belongs to user
+    const task = await db.collection("tasks").findOne({
+      _id: new ObjectId(id),
+      userId: user._id,
+    })
+
+    if (!task) {
+      return NextResponse.json(
+        { message: "Task not found or unauthorized" },
+        { status: 404 }
+      )
+    }
+
+    // Delete the entire task
+    const result = await db.collection("tasks").deleteOne({
+      _id: new ObjectId(id)
+    })
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json(
+        { message: "Task not found or could not be deleted" },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json({ 
+      success: true,
+      message: "Task deleted successfully"
+    })
+  } catch (error) {
+    console.error("Delete task error:", error)
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    )
+  }
+}

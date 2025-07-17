@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence, useAnimation } from "framer-motion"
-import { ChevronDown, ChevronUp, CheckCircle, Clock, Award, Sparkles, Star, Zap, Calendar } from "lucide-react"
+import { ChevronDown, ChevronUp, CheckCircle, Clock, Award, Sparkles, Star, Zap, Calendar, Trash2, AlertCircle } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { MicroTaskItem } from "@/components/micro-task-item"
@@ -14,15 +14,18 @@ interface TaskCardProps {
     _id: string
     title: string
     microTasks: Array<{
-      title: string
+      id: string
+      text: string
       done: boolean
     }>
     createdAt: string
   }
   onMicroTaskToggle: (taskId: string, microTaskIndex: number, done: boolean) => Promise<void>
+  onDeleteTask: (taskId: string) => Promise<void>
+  onDeleteMicroTask: (taskId: string, microTaskId: string) => Promise<void>
 }
 
-export function TaskCard({ task, onMicroTaskToggle }: TaskCardProps) {
+export function TaskCard({ task, onMicroTaskToggle, onDeleteTask, onDeleteMicroTask }: TaskCardProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [showSparkle, setShowSparkle] = useState(false)
@@ -112,13 +115,37 @@ export function TaskCard({ task, onMicroTaskToggle }: TaskCardProps) {
               </motion.div>
             )}
             <span className={cn(
-              "font-medium",
-              isCompleted ? "text-success" : "",
-              isInProgress && "bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+              "text-lg font-medium",
+              isCompleted && "text-muted-foreground line-through decoration-1"
             )}>
               {task.title}
             </span>
           </div>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ 
+              opacity: isHovered ? 1 : 0,
+              scale: isHovered ? 1 : 0.8,
+            }}
+            transition={{ duration: 0.2 }}
+          >
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-8 w-8 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (window.confirm('Are you sure you want to delete this task?')) {
+                  onDeleteTask(task._id);
+                }
+              }}
+              title="Delete task"
+            >
+              <Trash2 className="h-4 w-4" />
+              <span className="sr-only">Delete task</span>
+            </Button>
+          </motion.div>
           
           <div className="flex items-center gap-2 text-sm">
             <Badge variant="outline" className="flex items-center gap-1 px-2 py-0.5 text-xs font-normal bg-background/80">
@@ -189,12 +216,16 @@ export function TaskCard({ task, onMicroTaskToggle }: TaskCardProps) {
             >
               {task.microTasks.map((microTask, index) => (
                 <MicroTaskItem
-                  key={`${task._id}-${index}`}
-                  microTask={microTask}
+                  key={`${task._id}-${microTask.id}`}
+                  microTask={{
+                    title: microTask.text,
+                    done: microTask.done
+                  }}
                   index={index}
                   taskId={task._id}
                   onToggle={(done) => onMicroTaskToggle(task._id, index, done)}
                   delay={index}
+                  onDelete={() => onDeleteMicroTask(task._id, microTask.id)}
                 />
               ))}
             </motion.div>
